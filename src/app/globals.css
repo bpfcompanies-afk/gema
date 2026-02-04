@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  /* Definimos los colores de Gema como variables nativas del tema */
+  --color-gema-blue: #15aff6;
+  --color-gema-purple: #8230f1;
+  --color-gema-dark: #212121;
+  --color-gema-light: #fafafa;
+
+  /* Fuentes (Asumiendo que usas Inter o similar desde layout.js) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Estilos Base */
+body {
+  background-color: var(--color-gema-light);
+  color: var(--color-gema-dark);
+  font-family: var(--font-sans);
+}
+
+/* Utilidades Personalizadas */
+@utility text-gradient {
+  background: linear-gradient(90deg, var(--color-gema-blue) 0%, var(--color-gema-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility bg-gema-gradient {
+  background: linear-gradient(90deg, var(--color-gema-blue) 0%, var(--color-gema-purple) 100%);
+}
+
+/* Clase para el Navbar tipo vidrio (Glassmorphism) */
+@utility glass-nav {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+
+
+.custom-shape-divider-bottom-1770149152 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1770149152 svg {
+    position: relative;
+    display: block;
+    width: calc(300% + 1.3px);
+    height: 89px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1770149152 .shape-fill {
+    fill: #000000;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+    .custom-shape-divider-bottom-1770149152 svg {
+        width: calc(281% + 1.3px);
+        height: 70px;
+    }
+}
