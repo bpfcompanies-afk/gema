@@ -189,7 +189,7 @@ export default function BentoGrid() {
                     <card.Icon size={48} className={`hidden md:block mb-4 ${card.accentColor}`} strokeWidth={1.5} />
                     <h4 className="hidden md:block text-lg font-bold text-gema-dark mb-2">{card.title}</h4>
 
-                    <p className={`text-sm leading-relaxed mb-4 `}>
+                    <p className={`text-sm leading-relaxed mb-4 text-white md:text-gray-600`}>
                       {card.description}
                     </p>
 

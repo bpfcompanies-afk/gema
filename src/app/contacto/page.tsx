@@ -105,15 +105,41 @@ export default function ContactPage() {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      alert('¡Mensaje enviado con éxito!');
-      setIsSubmitting(false);
-      setFormState({ name: '', email: '', company: '', message: '' });
-    }, 1500);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+   e.preventDefault();
+   setIsSubmitting(true); // Activa la animación de carga
+
+   try {
+      const response = await fetch('/api/send', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(formState),
+      });
+
+      if (response.ok) {
+         // Éxito
+         alert('¡Mensaje enviado correctamente! Nos pondremos en contacto contigo.');
+         // Limpiar el formulario
+         setFormState({
+            name: '',
+            email: '',
+            company: '',
+            message: ''
+         });
+      } else {
+         // Error del servidor
+         alert('Hubo un error al enviar el mensaje. Por favor intenta de nuevo.');
+      }
+   } catch (error) {
+      // Error de red
+      console.error(error);
+      alert('Error de conexión.');
+   } finally {
+      setIsSubmitting(false); // Desactiva la animación de carga
+   }
+};
 
   const copyEmail = () => {
     navigator.clipboard.writeText('hola@gema.co');
