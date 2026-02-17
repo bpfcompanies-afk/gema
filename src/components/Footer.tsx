@@ -158,9 +158,9 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2 footer-col">
             <h4 className="text-lg font-bold mb-6 text-white">Legal</h4>
             <ul className="space-y-4 text-sm text-gray-400">
-              <li><Link href="/privacidad" className="hover:text-white hover:translate-x-1 transition-all inline-block">Privacidad</Link></li>
-              <li><Link href="/terminos" className="hover:text-white hover:translate-x-1 transition-all inline-block">Términos</Link></li>
-              <li><Link href="/seguridad" className="hover:text-white hover:translate-x-1 transition-all inline-block">Seguridad</Link></li>
+              <li><Link href="/legales" className="hover:text-white hover:translate-x-1 transition-all inline-block">Privacidad</Link></li>
+              <li><Link href="/legales" className="hover:text-white hover:translate-x-1 transition-all inline-block">Términos</Link></li>
+              <li><Link href="/legales" className="hover:text-white hover:translate-x-1 transition-all inline-block">Seguridad</Link></li>
             </ul>
           </div>
         </div>
