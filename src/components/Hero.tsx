@@ -103,8 +103,8 @@ export default function Hero() {
           </div>
           
           <h1 ref={textTitleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-gema-dark opacity-0">
-            Potencia de SAP, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gema-blue to-gema-purple">facilidad de Canva.</span>
+            Potecia y facilidad, <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gema-blue to-gema-purple">al servicio de tu compañia.</span>
           </h1>
           
           <p ref={textDescRef} className="text-lg text-gray-600 max-w-lg leading-relaxed opacity-0">
