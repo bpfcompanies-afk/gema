@@ -2,14 +2,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ModuleMockup from '@/src/components/ModuleMockup';
-import { 
-  Package01Icon as Package, 
-  LayerIcon as Layers01, 
-  Wifi01Icon as WifiSignal, 
-  Activity01Icon as Activity01, 
-  Invoice03Icon as Invoice03, 
+import {
+  Package01Icon as Package,
+  LayerIcon as Layers01,
+  Wifi01Icon as WifiSignal,
+  Activity01Icon as Activity01,
+  Invoice03Icon as Invoice03,
   SecurityCheckIcon as SecurityCheck,
-  ArrowRight01Icon as ArrowRight01
+  ArrowRight01Icon as ArrowRight01,
+  Wallet02Icon as WalletIcon,
+  NoteEditIcon as FormIcon
 } from 'hugeicons-react';
 
 const modules = [
@@ -96,6 +98,34 @@ const modules = [
       'Autenticación de dos factores (2FA).',
       'Sesiones seguras y bloqueos automáticos.'
     ]
+  },
+  {
+    id: 'caja_menor',
+    title: 'Caja Menor',
+    icon: WalletIcon,
+    color: 'text-purple-600',
+    tagline: 'Controla cada peso de tus billeteras.',
+    description: 'Gestiona billeteras digitales por sede, registra transacciones, valida comprobantes y mantén siempre visible el saldo disponible de tu empresa.',
+    features: [
+      'Billeteras por sede con saldo en tiempo real.',
+      'Flujo de validación de transacciones y archivos.',
+      'Categorías de gasto configurables.',
+      'Reportes de movimientos y saldos retenidos.'
+    ]
+  },
+  {
+    id: 'formularios',
+    title: 'Formularios',
+    icon: FormIcon,
+    color: 'text-blue-500',
+    tagline: 'De formulario a documento en un clic.',
+    description: 'Crea formularios dinámicos que se convierten automáticamente en documentos Word personalizados. Registra respuestas por beneficiario y exporta todo a Excel cuando lo necesites.',
+    features: [
+      'Constructor de formularios dinámicos sin código.',
+      'Generación automática de plantillas Word con los datos.',
+      'Registro histórico de respuestas por persona/beneficiario.',
+      'Exportación a Excel con todos los registros del formulario.'
+    ]
   }
 ];
 
@@ -138,7 +168,7 @@ export default function ModulesPage() {
       
       {/* HEADER: Ajustado a mayor ancho */}
       <section className="bg-gema-light pt-32 pb-16 border-b border-gray-100 w-full">
-        <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16">
+        <div className="w-full max-w-450 mx-auto px-6 md:px-12 lg:px-16">
           <h1 className="text-4xl md:text-6xl font-bold text-gema-dark mb-4 max-w-4xl">
             Explora nuestros <span className="text-gradient">Módulos</span>
           </h1>
@@ -149,7 +179,7 @@ export default function ModulesPage() {
       </section>
 
       {/* CONTENEDOR PRINCIPAL: Full Width Layout */}
-      <div className="w-full max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 py-12 flex flex-col md:flex-row gap-12 lg:gap-24 relative">
+      <div className="w-full max-w-450 mx-auto px-6 md:px-12 lg:px-16 py-12 flex flex-col md:flex-row gap-12 lg:gap-24 relative">
         
         {/* --- COLUMNA IZQUIERDA: MENÚ STICKY --- 
             Ahora tiene un ancho fijo (w-72) y no un porcentaje, 
@@ -180,7 +210,7 @@ export default function ModulesPage() {
             ))}
           </nav>
           
-          <div className="mt-10 p-6 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100 text-center shadow-sm">
+          <div className="mt-10 p-6 bg-linear-to-br from-blue-50 to-white rounded-2xl border border-blue-100 text-center shadow-sm">
              <p className="text-sm text-gema-dark font-bold mb-3">¿Necesitas algo a medida?</p>
              <Link href="/contacto" className="text-xs bg-gema-blue text-white px-5 py-3 rounded-full inline-block hover:shadow-lg hover:shadow-blue-500/20 transition-all font-semibold w-full">
                Contactar Soporte
@@ -222,7 +252,7 @@ export default function ModulesPage() {
                    aspect-video mantiene la proporción 16:9
                 */}
                 <div className="rounded-2xl overflow-hidden shadow-2xl shadow-gray-200/50 border border-gray-200/60">
-                    <ModuleMockup type={mod.id as 'activos' | 'consumibles' | 'iot' | 'medica' | 'compras' | 'seguridad'} />
+                    <ModuleMockup type={mod.id as 'activos' | 'consumibles' | 'iot' | 'medica' | 'compras' | 'seguridad' | 'caja_menor' | 'formularios'} />
                 </div>
               </div>
 
@@ -230,7 +260,7 @@ export default function ModulesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {mod.features.map((feat, i) => (
                   <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50/50 border border-transparent hover:border-gray-200 transition-colors">
-                    <div className="mt-1 min-w-[20px]">
+                    <div className="mt-1 min-w-5">
                        <ArrowRight01 size={18} className="text-gema-blue" />
                     </div>
                     <span className="text-gray-700 text-sm font-medium leading-snug">{feat}</span>
@@ -239,7 +269,7 @@ export default function ModulesPage() {
               </div>
 
               {/* Separador sutil entre secciones */}
-              <div className="mt-24 h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+              <div className="mt-24 h-px w-full bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
             </section>
           ))}

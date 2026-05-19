@@ -4,10 +4,10 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { 
-  DeliveryBox02Icon as BoxIcon, 
-  Alert01Icon, 
-  Search01Icon, 
+import {
+  DeliveryBox02Icon as BoxIcon,
+  Alert01Icon,
+  Search01Icon,
   FilterHorizontalIcon,
   // Iconos Nuevos:
   Wifi01Icon,
@@ -20,7 +20,14 @@ import {
   ArrowRight01Icon,
   Shield02Icon,
   LockKeyIcon,
-  Settings01Icon
+  Settings01Icon,
+  Wallet01Icon,
+  PlusSignIcon,
+  Refresh01Icon,
+  NoteEditIcon,
+  Calendar01Icon,
+  User03Icon,
+  FileExportIcon,
 } from "hugeicons-react"; 
 
 if (typeof window !== "undefined") {
@@ -28,7 +35,7 @@ if (typeof window !== "undefined") {
 }
 
 interface Props {
-  type: 'activos' | 'consumibles' | 'iot' | 'medica' | 'compras' | 'seguridad';
+  type: 'activos' | 'consumibles' | 'iot' | 'medica' | 'compras' | 'seguridad' | 'caja_menor' | 'formularios';
 }
 
 export default function ModuleMockup({ type }: Props) {
@@ -90,6 +97,18 @@ export default function ModuleMockup({ type }: Props) {
     if (type === 'seguridad') {
         tl.from(".user-row", { y: 15, opacity: 0, stagger: 0.1, duration: 0.5, ease: "power2.out" }, "-=0.2");
         tl.from(".toggle-switch", { scale: 0.8, opacity: 0, stagger: 0.1, duration: 0.4 }, "-=0.4");
+    }
+
+    if (type === 'caja_menor') {
+        tl.from(".wallet-header", { y: -10, opacity: 0, duration: 0.4 }, "-=0.2");
+        tl.from(".wallet-card", { y: 20, opacity: 0, stagger: 0.15, duration: 0.5, ease: "back.out(1.2)" }, "-=0.2");
+        tl.from(".wallet-amount", { opacity: 0, scale: 0.9, stagger: 0.1, duration: 0.4 }, "-=0.2");
+    }
+
+    if (type === 'formularios') {
+        tl.from(".form-summary-item", { x: -20, opacity: 0, stagger: 0.12, duration: 0.45, ease: "power2.out" }, "-=0.2");
+        tl.from(".form-field", { y: 12, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, "-=0.3");
+        tl.from(".form-btn", { scale: 0.92, opacity: 0, duration: 0.4, ease: "back.out(1.5)" }, "-=0.1");
     }
 
   }, { scope: containerRef, dependencies: [type] });
@@ -204,7 +223,7 @@ export default function ModuleMockup({ type }: Props) {
               
               {/* Foto de Paciente: Más pequeña en móvil */}
               <div className="relative mb-0 md:mb-4 shrink-0">
-                  <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-gradient-to-tr from-blue-500 to-sky-300 p-0.5 md:p-1 shadow-md transition-transform hover:scale-105 duration-300">
+                  <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-linear-to-tr from-blue-500 to-sky-300 p-0.5 md:p-1 shadow-md transition-transform hover:scale-105 duration-300">
                       <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                           <UserCircleIcon size={40} className="text-blue-100 md:hidden" />
                           <UserCircleIcon size={60} className="text-blue-100 hidden md:block" />
@@ -341,7 +360,7 @@ export default function ModuleMockup({ type }: Props) {
                     </div>
 
                     {/* Flecha animada */}
-                    <div className="flow-arrow flex-1 h-[2px] bg-gray-100 mx-2 relative overflow-hidden">
+                    <div className="flow-arrow flex-1 h-0.5 bg-gray-100 mx-2 relative overflow-hidden">
                          <div className="absolute inset-0 bg-blue-400 w-full -translate-x-full animate-[shimmer_2s_infinite]"></div>
                     </div>
 
@@ -354,7 +373,7 @@ export default function ModuleMockup({ type }: Props) {
                     </div>
 
                     {/* Flecha */}
-                    <div className="flow-arrow flex-1 h-[2px] bg-gray-100 mx-2"></div>
+                    <div className="flow-arrow flex-1 h-0.5 bg-gray-100 mx-2"></div>
 
                     {/* Paso 3: Compra */}
                     <div className="flow-step flex flex-col items-center gap-2 opacity-50">
@@ -409,15 +428,166 @@ export default function ModuleMockup({ type }: Props) {
             </div>
         );
         
+      // 7. CAJA MENOR
+      case 'caja_menor':
+        return (
+          <div className="flex flex-col h-full w-full gap-3">
+            {/* Header */}
+            <div className="wallet-header flex items-center justify-between mockup-ui-base">
+              <div>
+                <h3 className="text-xs font-bold text-gray-800">Billeteras Digitales</h3>
+                <p className="text-[9px] text-gray-400">Saldos y disponibilidad</p>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="bg-blue-600 text-white rounded-md px-2 py-1 flex items-center gap-1 text-[9px] font-bold shadow-sm shadow-blue-200">
+                  <PlusSignIcon size={8} /> Nueva
+                </div>
+              </div>
+            </div>
+
+            {/* Sede bar */}
+            <div className="wallet-header flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-md bg-purple-100 flex items-center justify-center">
+                  <Wallet01Icon size={12} className="text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-800">GEMA Central</p>
+                  <p className="text-[8px] text-gray-400">2 BILLETERAS</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-[8px] text-gray-400 uppercase tracking-wider">Total Sede</p>
+                <p className="text-[11px] font-bold text-purple-600">$1.815.494</p>
+              </div>
+            </div>
+
+            {/* Wallet cards */}
+            <div className="grid grid-cols-2 gap-2 flex-1">
+              {[
+                { name: "Caja menor", amount: "-$44.506", negative: true, validar: 1, archivos: 4, retenido: "$101.253", general: "$56.747" },
+                { name: "Compras",    amount: "$1.860.000", negative: false, validar: 1, archivos: 1, retenido: "$140.000", general: "$2.000.000" },
+              ].map((wallet, i) => (
+                <div key={i} className="wallet-card bg-white rounded-xl border border-gray-100 shadow-sm p-2.5 flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <Wallet01Icon size={12} className="text-blue-500" />
+                      <p className="text-[10px] font-bold text-gray-800">{wallet.name}</p>
+                    </div>
+                    <span className="text-[7px] bg-green-50 text-green-600 border border-green-200 px-1.5 py-0.5 rounded-full font-bold">ACTIVE</span>
+                  </div>
+
+                  <div>
+                    <p className="text-[7px] text-gray-400 uppercase tracking-wider">Disponible</p>
+                    <p className={`wallet-amount text-sm font-extrabold tracking-tight ${wallet.negative ? 'text-red-500' : 'text-gray-900'}`}>
+                      {wallet.amount}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2 text-[7px]">
+                    <div><span className="text-gray-400">Validar </span><span className="font-bold text-amber-500">{wallet.validar}</span></div>
+                    <div><span className="text-gray-400">Archivos </span><span className="font-bold text-red-400">{wallet.archivos}</span></div>
+                  </div>
+
+                  <div className="flex gap-1">
+                    <div className="flex-1 border border-blue-200 text-blue-600 rounded-md py-1 flex items-center justify-center gap-0.5 text-[7px] font-bold">
+                      <PlusSignIcon size={7} /> Crear
+                    </div>
+                    <div className="flex-1 border border-purple-200 text-purple-600 rounded-md py-1 flex items-center justify-center gap-0.5 text-[7px] font-bold">
+                      <Refresh01Icon size={7} /> Mover
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between text-[7px] pt-0.5 border-t border-gray-50">
+                    <div><span className="text-gray-400">Retenido </span><span className="font-bold text-red-400">{wallet.retenido}</span></div>
+                    <div><span className="text-gray-400">Gral </span><span className="font-bold text-gray-600">{wallet.general}</span></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      // 8. FORMULARIOS DINÁMICOS
+      case 'formularios':
+        return (
+          <div className="flex h-full w-full gap-3">
+
+            {/* Panel izquierdo — RESUMEN */}
+            <div className="w-[38%] shrink-0 flex flex-col gap-2">
+              <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest mockup-ui-base">Resumen</p>
+
+              {[
+                { label: 'BENEFICIARIO', value: 'Pedro Pancho', sub: 'CC 15478952', icon: <User03Icon size={10} className="text-purple-500"/>, bg: 'bg-purple-50 border-purple-100' },
+                { label: 'FORMULARIO',  value: 'Transporte',   sub: 'Mujeres',     icon: <NoteEditIcon size={10} className="text-blue-500"/>,   bg: 'bg-blue-50 border-blue-100' },
+                { label: 'BILLETERA',   value: 'Compras',      sub: '$1.860.000',  icon: <Wallet01Icon size={10} className="text-green-600"/>,  bg: 'bg-green-50 border-green-100' },
+                { label: 'CATEGORÍA',   value: 'Transporte',   sub: '',            icon: <FileExportIcon size={10} className="text-amber-500"/>, bg: 'bg-amber-50 border-amber-100' },
+              ].map((item, i) => (
+                <div key={i} className={`form-summary-item rounded-lg border p-2 ${item.bg}`}>
+                  <div className="flex items-center gap-1 mb-1">
+                    {item.icon}
+                    <p className="text-[7px] font-bold text-gray-400 uppercase tracking-wider">{item.label}</p>
+                  </div>
+                  <p className="text-[10px] font-bold text-gray-800 leading-tight">{item.value}</p>
+                  {item.sub && <p className="text-[8px] text-gray-500">{item.sub}</p>}
+                </div>
+              ))}
+            </div>
+
+            {/* Panel derecho — FORMULARIO */}
+            <div className="flex-1 flex flex-col gap-2 min-w-0">
+              <div className="mockup-ui-base">
+                <p className="text-[11px] font-bold text-gray-800">Transporte Mujeres</p>
+                <p className="text-[8px] text-gray-400">Complete los campos requeridos</p>
+              </div>
+
+              {/* Campos del formulario */}
+              <div className="form-field flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-2">
+                <Calendar01Icon size={10} className="text-gray-400 shrink-0"/>
+                <p className="text-[9px] text-gray-400">Fecha — DD/MM/YYYY</p>
+              </div>
+
+              <div className="form-field bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-2">
+                <p className="text-[9px] text-gray-400">Comprobante generado</p>
+              </div>
+
+              <div className="form-field bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-2">
+                <p className="text-[9px] text-gray-400">Descripción</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="form-field bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-2 text-center">
+                  <p className="text-[10px] font-bold text-gray-600">0</p>
+                  <p className="text-[7px] text-gray-400">Valor uno</p>
+                </div>
+                <div className="form-field bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-2 text-center">
+                  <p className="text-[10px] font-bold text-gray-600">0</p>
+                  <p className="text-[7px] text-gray-400">Valor dos</p>
+                </div>
+              </div>
+
+              {/* Botón guardar */}
+              <div className="form-btn mt-auto bg-linear-to-r from-blue-600 to-purple-600 rounded-lg px-3 py-2 flex items-center justify-center gap-1.5 shadow-md shadow-purple-200">
+                <CheckmarkCircle02Icon size={10} className="text-white"/>
+                <p className="text-[9px] font-bold text-white">Guardar y Enviar</p>
+              </div>
+
+              <p className="text-[7px] text-gray-400 text-center leading-tight">
+                Se realizará un cobro automático a la billetera
+              </p>
+            </div>
+          </div>
+        );
+
       default:
         return <div className="p-4 text-xs text-gray-400">Selecciona un tipo de módulo</div>;
     }
   };
 
   return (
-    <div ref={containerRef} className="w-full h-full min-h-[500px] flex items-center justify-center p-2">
+    <div ref={containerRef} className="w-full h-full min-h-125 flex items-center justify-center p-2">
       {/* WINDOW SHELL */}
-      <div className="w-full h-full min-h-[450px] bg-slate-50 rounded-xl border border-gray-200/80 shadow-2xl shadow-gray-200/50 flex flex-col overflow-hidden relative">
+      <div className="w-full h-full min-h-112.5 bg-slate-50 rounded-xl border border-gray-200/80 shadow-2xl shadow-gray-200/50 flex flex-col overflow-hidden relative">
         
         {/* Barra de Título */}
         <div className="h-9 bg-white border-b border-gray-100 flex items-center px-4 justify-between z-10 mockup-ui-base">
@@ -444,7 +614,7 @@ export default function ModuleMockup({ type }: Props) {
             {/* AREA DE CONTENIDO */}
             <div className="flex-1 bg-slate-50/50 p-4 overflow-hidden relative">
                 {/* Elemento decorativo */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-blue-100/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
                 {renderContent()}
             </div>
         </div>

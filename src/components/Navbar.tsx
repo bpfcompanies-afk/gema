@@ -32,7 +32,7 @@ const AccessBtn = ({ isScrolled, mobile = false }: { isScrolled: boolean; mobile
         }
       `}
     >
-      <span className="-translate-y-[1px]">Acceso</span>
+      <span className="-translate-y-px">Acceso</span>
     </Link>
   );
 };
@@ -101,7 +101,7 @@ export default function Navbar() {
         El nav ahora es solo la barra superior (z-index 200).
         El overlay es un div independiente (z-index 150).
       */}
-      <nav ref={navRef} className="fixed top-0 left-0 w-full z-[200] flex justify-center pointer-events-none">
+      <nav ref={navRef} className="fixed top-0 left-0 w-full z-200 flex justify-center pointer-events-none">
         <div 
           className={`
             flex items-center justify-between pointer-events-auto
@@ -114,7 +114,7 @@ export default function Navbar() {
             }
           `}
         >
-          <Link href="/" className="relative z-[210] flex items-center gap-3 shrink-0 h-full">
+          <Link href="/" className="relative z-210 flex items-center gap-3 shrink-0 h-full">
             <img 
               src="/Gema.png" 
               alt="Gema Logo" 
@@ -127,7 +127,7 @@ export default function Navbar() {
               {navLinks.map((link) => (
                 <Link key={link.name} href={link.path} className={`relative px-6 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-500 rounded-full flex items-center justify-center leading-none ${pathname === link.path ? 'text-white' : 'text-gray-500 hover:text-gema-blue'}`}>
                   {pathname === link.path && <div className="absolute inset-0 bg-gema-gradient rounded-full -z-10 shadow-md" />}
-                  <span className="relative z-10 -translate-y-[1px]">{link.name}</span>
+                  <span className="relative z-10 -translate-y-px">{link.name}</span>
                 </Link>
               ))}
             </div>
@@ -140,7 +140,7 @@ export default function Navbar() {
 
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="relative z-[210] md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none pointer-events-auto"
+              className="relative z-210 md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none pointer-events-auto"
             >
               <span className={`w-6 h-0.5 bg-black transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
               <span className={`w-6 h-0.5 bg-black transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} />
@@ -153,7 +153,7 @@ export default function Navbar() {
       {/* --- OVERLAY MÓVIL: Movido fuera del NAV para romper el contexto de apilamiento --- */}
       <div 
         ref={menuRef}
-        className="fixed inset-0 bg-white z-[150] md:hidden flex flex-col items-center justify-center px-8 invisible"
+        className="fixed inset-0 bg-white z-150 md:hidden flex flex-col items-center justify-center px-8 invisible"
         style={{ clipPath: 'circle(0% at 100% 0%)' }}
       >
         <div className="flex flex-col gap-6 w-full max-w-sm text-center">

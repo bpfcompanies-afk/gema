@@ -12,6 +12,9 @@ export default function Hero() {
   
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Centrado del núcleo via GSAP para que x/y del parallax no destruya el -50%
+      gsap.set(".nucleus-card", { xPercent: -50, yPercent: -50 });
+
       // 1. INTRO ANIMATION
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
@@ -83,7 +86,7 @@ export default function Hero() {
       {/* Este div llena toda la pantalla detrás del contenido, asegurando que el Navbar tenga fondo */}
       <div className="absolute inset-0 z-0">
           {/* Gradiente base sutil */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-white to-white"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-blue-50 via-white to-white"></div>
           
           {/* Blob Decorativo Superior (Detrás del Navbar) */}
           <div className="bg-shape absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] bg-purple-200/20 rounded-full blur-[120px] mix-blend-multiply"></div>
@@ -104,11 +107,11 @@ export default function Hero() {
           
           <h1 ref={textTitleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-gema-dark opacity-0">
             Potecia y facilidad, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gema-blue to-gema-purple">al servicio de tu compañia.</span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">al servicio de tu compañia.</span>
           </h1>
           
           <p ref={textDescRef} className="text-lg text-gray-600 max-w-lg leading-relaxed opacity-0">
-            La plataforma modular todo-en-uno. Gestiona inventarios y personal médico con una interfaz que tu equipo amará usar.
+            Infraestructura líquida adaptada a ti. Cambiamos el caos administrativo por orden estratégico.
           </p>
           
           <div ref={textBtnRef} className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto opacity-0">
@@ -122,7 +125,7 @@ export default function Hero() {
         </div>
 
         {/* COLUMNA DERECHA: VISUALES */}
-        <div className="w-full lg:w-1/2 relative h-[500px] flex items-center justify-center">
+        <div className="w-full lg:w-1/2 relative h-125 flex items-center justify-center">
   
   {/* ESCENARIO DESKTOP */}
   <div className="hidden lg:block relative w-full h-full perspective-[1000px]">
@@ -132,13 +135,13 @@ export default function Hero() {
       <div className="absolute inset-0 flex items-center justify-center ">
       
       {/* Órbita Pequeña */}
-      <div className=" floating-card absolute w-[280px] h-[280px] rounded-full border-[1.5px] border-dashed border-blue-500 animate-[spin_60s_linear_infinite]"></div>
+      <div className=" floating-card absolute w-70 h-70 rounded-full border-[1.5px] border-dashed border-blue-500 animate-[spin_60s_linear_infinite]"></div>
       
       {/* Órbita Mediana (Gira al revés) */}
-      <div className="floating-card absolute w-[420px] h-[420px] rounded-full border-[1.5px] border-dashed border-purple-500 animate-[spin_80s_linear_infinite_reverse]"></div>
+      <div className="floating-card absolute w-105 h-105 rounded-full border-[1.5px] border-dashed border-purple-500 animate-[spin_80s_linear_infinite_reverse]"></div>
       
       {/* Órbita Grande */}
-      <div className="floating-card absolute w-[580px] h-[580px] rounded-full border-[1.5px] border-dashed border-slate-500 animate-[spin_100s_linear_infinite]"></div>
+      <div className="floating-card absolute w-145 h-145 rounded-full border-[1.5px] border-dashed border-slate-500 animate-[spin_100s_linear_infinite]"></div>
       {/* <div className=" absolute w-[1080px] h-[1080px] rounded-full border-[1.5px] border-dashed border-slate-500 animate-[spin_100s_linear_infinite]"></div>
       <div className=" absolute w-[1580px] h-[1580px] rounded-full border-[1.5px] border-dashed border-slate-500 animate-[spin_100s_linear_infinite]"></div>
       <div className=" absolute w-[2080px] h-[2080px] rounded-full border-[1.5px] border-dashed border-slate-500 animate-[spin_100s_linear_infinite]"></div> */}
@@ -147,7 +150,7 @@ export default function Hero() {
     </div>
 
       {/* Núcleo Central */}
-     <div className="floating-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+     <div className="floating-card nucleus-card absolute top-1/2 left-1/2 z-20">
       <img 
         src="/Gema tittle.png" 
         alt="Gema Logo White" 

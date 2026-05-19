@@ -98,15 +98,23 @@ const PricingCard = ({
         </div>
 
         <div className="mb-8 min-h-[60px]">
-           <div className="flex items-baseline gap-1" key={isAnnual ? 'annual' : 'monthly'}>
-              <span className={`text-4xl font-extrabold tracking-tight ${plan.isDark ? 'text-white' : 'text-gray-900'}`}>
-                {formatMoney(isAnnual ? plan.annualPrice : plan.monthlyPrice)}
-              </span>
-              <span className={`text-sm font-medium ${plan.isDark ? 'text-gray-400' : 'text-gray-500'}`}>/mes</span>
-           </div>
-           <div className={`text-xs font-bold mt-2 transition-all duration-300 ${isAnnual ? 'opacity-100 text-green-600' : 'opacity-0'}`}>
-             Ahorras 20% anual
-           </div>
+          {plan.contactOnly ? (
+            <div className="flex items-baseline gap-1">
+              <span className="text-3xl font-extrabold tracking-tight text-white">Contáctanos</span>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-baseline gap-1" key={isAnnual ? 'annual' : 'monthly'}>
+                <span className={`text-4xl font-extrabold tracking-tight ${plan.isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {formatMoney(isAnnual ? plan.annualPrice : plan.monthlyPrice)}
+                </span>
+                <span className={`text-sm font-medium ${plan.isDark ? 'text-gray-400' : 'text-gray-500'}`}>/mes</span>
+              </div>
+              <div className={`text-xs font-bold mt-2 transition-all duration-300 ${isAnnual ? 'opacity-100 text-green-600' : 'opacity-0'}`}>
+                Ahorras 20% anual
+              </div>
+            </>
+          )}
         </div>
 
         <div className={`w-full h-px mb-8 ${plan.isDark ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
@@ -135,9 +143,13 @@ const PricingCard = ({
 
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Estado para saber cual card se mira
+  const [hoveredUso, setHoveredUso] = useState<number | null>(null);
+  const [hoveredDesarrollo, setHoveredDesarrollo] = useState<number | null>(null);
+  const [openInfo, setOpenInfo] = useState<'uso' | 'desarrollo' | null>(null);
   const containerRef = useRef(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const infoUsoRef = useRef<HTMLDivElement>(null);
+  const infoDesarrolloRef = useRef<HTMLDivElement>(null);
 
   const plans = useMemo(() => [
     {
@@ -181,7 +193,7 @@ export default function PricingPage() {
       spotlightColor: '#9333ea',
       checkColor: 'text-purple-500',
       btnClass: 'bg-gray-900 text-white hover:bg-black shadow-lg shadow-purple-500/20',
-      features: ['15 Compañías', '100 Usuarios', 'Soporte Prioritario', 'Automatización', 'Asesoría Dedicada']
+      features: ['15 Compañías', '100 Usuarios', 'Soporte Prioritario', 'Automatización', '50 Horas de Desarrollo Dedicado']
     },
     {
       id: 'black',
@@ -191,6 +203,7 @@ export default function PricingPage() {
       annualPrice: 8000000,
       icon: Shield01,
       isDark: true,
+      contactOnly: true,
       iconBg: 'bg-white/10',
       iconColor: 'text-white',
       spotlightColor: '#ffffff',
@@ -221,6 +234,18 @@ export default function PricingPage() {
     }, containerRef);
     return () => ctx.revert();
   }, []);
+
+  // Cerrar popover al hacer click fuera
+  useLayoutEffect(() => {
+    if (!openInfo) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as Node;
+      const ref = openInfo === 'uso' ? infoUsoRef.current : infoDesarrolloRef.current;
+      if (ref && !ref.contains(target)) setOpenInfo(null);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [openInfo]);
 
   const formatMoney = (amount: number) => {
     return new Intl.NumberFormat('es-CO', {
@@ -256,28 +281,105 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* GRID DE PRECIOS */}
-      <div ref={cardsRef} className="container mx-auto max-w-[1400px] px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-center min-h-[600px]">
-          {plans.map((plan, index) => (
-            <div key={plan.id} className="pricing-card-wrapper h-full flex flex-col p-2">
-              <PricingCard 
-                plan={plan} 
-                isAnnual={isAnnual} 
-                formatMoney={formatMoney}
-                index={index}
-                hoveredIndex={hoveredIndex}     // Pasamos el estado al hijo
-                setHoveredIndex={setHoveredIndex} 
-              />
+      {/* SECCIONES DE PRECIOS */}
+      <div ref={cardsRef} className="container mx-auto max-w-[1000px] px-4 md:px-8 space-y-20">
+
+        {/* ── LICENCIAS DE USO ── */}
+        <div>
+          {/* Encabezado de sección */}
+          <div className="flex items-center gap-4 mb-10">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <div ref={infoUsoRef} className="relative flex items-center gap-2">
+              <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Licencias de Uso</span>
+              <button
+                onClick={() => setOpenInfo(openInfo === 'uso' ? null : 'uso')}
+                className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-extrabold flex items-center justify-center hover:bg-blue-200 transition-colors shrink-0"
+              >i</button>
+
+              {openInfo === 'uso' && (
+                <div className="absolute top-9 left-1/2 -translate-x-1/2 z-50 w-80 bg-white rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/60 p-5">
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                  <p className="text-sm font-bold text-gray-900 mb-2">¿Qué es una Licencia de Uso?</p>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-3">
+                    Permiten el acceso completo a la plataforma Gema y a todos sus módulos disponibles.
+                  </p>
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-blue-500 mt-0.5">✓</span> Acceso a todos los módulos activos de la plataforma.</li>
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-blue-500 mt-0.5">✓</span> <span><strong>Plan Plus:</strong> acceso anticipado a nuevas funcionalidades que se desarrollen periódicamente.</span></li>
+                  </ul>
+                </div>
+              )}
             </div>
-          ))}
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            {plans.slice(0, 2).map((plan, index) => (
+              <div key={plan.id} className="pricing-card-wrapper h-full flex flex-col p-2">
+                <PricingCard
+                  plan={plan}
+                  isAnnual={isAnnual}
+                  formatMoney={formatMoney}
+                  index={index}
+                  hoveredIndex={hoveredUso}
+                  setHoveredIndex={setHoveredUso}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-20 text-center">
+        {/* ── LICENCIAS DE DESARROLLO ── */}
+        <div>
+          {/* Encabezado de sección */}
+          <div className="flex items-center gap-4 mb-10">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <div ref={infoDesarrolloRef} className="relative flex items-center gap-2">
+              <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Licencias de Desarrollo</span>
+              <button
+                onClick={() => setOpenInfo(openInfo === 'desarrollo' ? null : 'desarrollo')}
+                className="w-6 h-6 rounded-full bg-purple-100 text-purple-600 text-xs font-extrabold flex items-center justify-center hover:bg-purple-200 transition-colors shrink-0"
+              >i</button>
+
+              {openInfo === 'desarrollo' && (
+                <div className="absolute top-9 left-1/2 -translate-x-1/2 z-50 w-80 bg-white rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/60 p-5">
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                  <p className="text-sm font-bold text-gray-900 mb-2">¿Qué es una Licencia de Desarrollo?</p>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-3">
+                    Incluye todo lo de las licencias de uso, más la capacidad de solicitar funcionalidad personalizada a la medida de tu operación.
+                  </p>
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Todo lo incluido en las licencias de uso.</li>
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Desarrollo de módulos o flujos personalizados para tu empresa.</li>
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Acompañamiento técnico dedicado durante el desarrollo.</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            {plans.slice(2).map((plan, index) => (
+              <div key={plan.id} className="pricing-card-wrapper h-full flex flex-col p-2">
+                <PricingCard
+                  plan={plan}
+                  isAnnual={isAnnual}
+                  formatMoney={formatMoney}
+                  index={index}
+                  hoveredIndex={hoveredDesarrollo}
+                  setHoveredIndex={setHoveredDesarrollo}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="text-center">
           <Link href="/contacto" className="group inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium">
-             <HelpCircle size={18} />
-             <span>¿Necesitas una instalación On-Premise?</span>
-             <span className="border-b border-gray-300 group-hover:border-gray-900 pb-0.5 text-gray-900">Contáctanos para Enterprise</span>
+            <HelpCircle size={18} />
+            <span>¿Necesitas una instalación On-Premise?</span>
+            <span className="border-b border-gray-300 group-hover:border-gray-900 pb-0.5 text-gray-900">Contáctanos</span>
           </Link>
         </div>
       </div>

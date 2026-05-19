@@ -77,7 +77,7 @@ export default function ValueProp() {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gema-dark mb-6 leading-tight">
               Diseñado para <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gema-blue to-gema-purple">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">
                 equipos reales.
               </span>
             </h2>
@@ -87,7 +87,7 @@ export default function ValueProp() {
           </div>
 
           {/* --- BLOQUE DERECHO: STACK DE TARJETAS --- */}
-          <div className="lg:w-2/3 relative w-full h-[550px] flex items-center justify-center">
+          <div className="lg:w-2/3 relative w-full h-137.5 flex items-center justify-center">
             
             {/* CARD 1: VELOCIDAD */}
             <div className="feature-card absolute inset-0 flex items-center justify-center opacity-0">

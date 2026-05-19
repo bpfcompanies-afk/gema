@@ -3,14 +3,16 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
-import { 
-  Package01Icon, 
-  Wifi01Icon, 
-  Activity01Icon, 
-  Invoice03Icon, 
-  SecurityCheckIcon, 
-  LayerAddIcon, 
-  ArrowRight01Icon 
+import {
+  Package01Icon,
+  Wifi01Icon,
+  Activity01Icon,
+  Invoice03Icon,
+  SecurityCheckIcon,
+  LayerAddIcon,
+  ArrowRight01Icon,
+  Wallet02Icon,
+  NoteEditIcon
 } from 'hugeicons-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -74,11 +76,33 @@ const cards = [
   {
     id: 'consumibles',
     title: 'Consumibles',
-    Icon: LayerAddIcon, 
+    Icon: LayerAddIcon,
     colSpan: 'md:col-span-2',
-    rowSpan: 'md:row-span-1', // Original
+    rowSpan: 'md:row-span-1',
     bg: 'bg-orange-500 text-white',
     description: 'Gestión de inventario rotativo y EPPs.',
+    accentColor: 'text-white',
+    visualColor: 'bg-white/10'
+  },
+  {
+    id: 'caja_menor',
+    title: 'Caja Menor',
+    Icon: Wallet02Icon,
+    colSpan: 'md:col-span-2',
+    rowSpan: 'md:row-span-2',
+    bg: 'bg-purple-600 text-white',
+    description: 'Billeteras digitales por sede con saldo en tiempo real y validación de transacciones.',
+    accentColor: 'text-white',
+    visualColor: 'bg-white/10'
+  },
+  {
+    id: 'formularios',
+    title: 'Formularios',
+    Icon: NoteEditIcon,
+    colSpan: 'md:col-span-1',
+    rowSpan: 'md:row-span-2',
+    bg: 'bg-teal-500 text-white',
+    description: 'Formularios dinámicos que generan documentos Word y exportan registros a Excel.',
     accentColor: 'text-white',
     visualColor: 'bg-white/10'
   }
@@ -113,7 +137,7 @@ export default function BentoGrid() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-gema-dark mb-4">
             Todo conectado. <br className="md:hidden" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gema-blue to-gema-purple">Nada complicado.</span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">Nada complicado.</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             Módulos independientes que funcionan como un solo organismo.
@@ -169,7 +193,7 @@ export default function BentoGrid() {
                  </div>
 
                  {/* VISUAL DE FONDO (Decorativo) */}
-                 <div className="absolute bottom-[-20px] right-[-20px] opacity-50 pointer-events-none transform rotate-12 group-hover:scale-110 transition-transform duration-500">
+                 <div className="absolute -bottom-5 -right-5 opacity-50 pointer-events-none transform rotate-12 group-hover:scale-110 transition-transform duration-500">
                     <card.Icon size={140} className={card.id === 'iot' ? 'text-white' : 'text-white'} />
                  </div>
 
