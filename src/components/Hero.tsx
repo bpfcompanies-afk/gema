@@ -106,7 +106,7 @@ export default function Hero() {
           </div>
           
           <h1 ref={textTitleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-gema-dark opacity-0">
-            Potecia y facilidad, <br />
+            Potencia y facilidad, <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">al servicio de tu compañia.</span>
           </h1>
           
