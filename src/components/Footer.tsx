@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { 
-  TwitterIcon, 
-  Linkedin01Icon, 
-  InstagramIcon, 
-  ArrowRight01Icon 
+import { usePathname } from 'next/navigation';
+import {
+  TwitterIcon,
+  Linkedin01Icon,
+  InstagramIcon,
+  ArrowRight01Icon
 } from 'hugeicons-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,8 +16,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const bgTextRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname === '/bio') return;
+
     const ctx = gsap.context(() => {
       // 1. ANIMACIÓN DE ENTRADA (Columnas subiendo)
       gsap.fromTo(".footer-col",
@@ -51,7 +55,7 @@ export default function Footer() {
     }, footerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [pathname]);
 
   // Efecto Magnético simple para iconos
   const handleMagnet = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -66,6 +70,8 @@ export default function Footer() {
   const resetMagnet = (e: React.MouseEvent<HTMLDivElement>) => {
     gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
   };
+
+  if (pathname === '/bio') return null;
 
   return (
     <footer ref={footerRef} className="relative bg-gema-dark text-white pt-32 pb-10 overflow-hidden">

@@ -95,6 +95,8 @@ export default function Navbar() {
     { name: 'Contáctanos', path: '/contacto' },
   ];
 
+  if (pathname === '/bio') return null;
+
   return (
     <>
       {/* EL AJUSTE: He separado el nav del overlay. 
