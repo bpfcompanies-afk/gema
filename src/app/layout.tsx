@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SmoothScroll from "../components/SmoothScroll"; // <--- Importamos aquí
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
         </SmoothScroll>
         <Analytics />
+        <GoogleAnalytics gaId="G-E7K0643F6F" />
       </body>
     </html>
   );
