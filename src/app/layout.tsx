@@ -1,8 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/Navbar"; 
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SmoothScroll from "../components/SmoothScroll"; // <--- Importamos aquí
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -18,11 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Envolvemos todo el contenido visible dentro de SmoothScroll */}
         <SmoothScroll>
             <Navbar />
-            <main className="w-full"> 
+            <main className="w-full">
               {children}
             </main>
             <Footer />
         </SmoothScroll>
+        <Analytics />
       </body>
     </html>
   );
