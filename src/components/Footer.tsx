@@ -5,10 +5,11 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePathname } from 'next/navigation';
 import {
-  TwitterIcon,
   Linkedin01Icon,
   InstagramIcon,
-  ArrowRight01Icon
+  ArrowRight01Icon,
+  Facebook01Icon,
+  TiktokIcon
 } from 'hugeicons-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -58,7 +59,7 @@ export default function Footer() {
   }, [pathname]);
 
   // Efecto Magnético simple para iconos
-  const handleMagnet = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMagnet = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const item = e.currentTarget;
     const bound = item.getBoundingClientRect();
     const x = e.clientX - (bound.left + bound.width / 2);
@@ -67,7 +68,7 @@ export default function Footer() {
     gsap.to(item, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' });
   };
 
-  const resetMagnet = (e: React.MouseEvent<HTMLDivElement>) => {
+  const resetMagnet = (e: React.MouseEvent<HTMLAnchorElement>) => {
     gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
   };
 
@@ -179,9 +180,18 @@ export default function Footer() {
           
           {/* Socials Magnéticos */}
           <div className="flex gap-4 mt-4 md:mt-0">
-            {[<TwitterIcon key="tw"/>, <Linkedin01Icon key="li"/>, <InstagramIcon key="ig"/>].map((icon, i) => (
-               <div 
+            {[
+              { icon: <Facebook01Icon key="fb"/>, href: 'https://www.facebook.com/profile.php?id=61589596612905', label: 'Facebook' },
+              { icon: <Linkedin01Icon key="li"/>, href: 'https://www.linkedin.com/in/gemabpf', label: 'LinkedIn' },
+              { icon: <InstagramIcon key="ig"/>, href: 'https://www.instagram.com/gemabpf/', label: 'Instagram' },
+              { icon: <TiktokIcon key="tt"/>, href: 'https://www.tiktok.com/@gemabpf', label: 'TikTok' },
+            ].map(({ icon, href, label }, i) => (
+               <a
                   key={i}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
                   onMouseMove={handleMagnet}
                   onMouseLeave={resetMagnet}
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white hover:text-gema-dark transition-colors cursor-pointer"
@@ -189,7 +199,7 @@ export default function Footer() {
                   <div className="pointer-events-none">
                      {icon}
                   </div>
-               </div>
+               </a>
             ))}
           </div>
         </div>
