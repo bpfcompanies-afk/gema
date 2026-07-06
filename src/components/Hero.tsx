@@ -107,11 +107,11 @@ export default function Hero() {
           
           <h1 ref={textTitleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-gema-dark opacity-0">
             Potencia y facilidad, <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">al servicio de tu compañia.</span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-gema-blue to-gema-purple">al servicio de tu fundacion.</span>
           </h1>
           
           <p ref={textDescRef} className="text-lg text-gray-600 max-w-lg leading-relaxed opacity-0">
-            Infraestructura líquida adaptada a ti. Cambiamos el caos administrativo por orden estratégico.
+            Infraestructura flexible adaptada a ti. Cambiamos el caos administrativo por orden estratégico.
           </p>
           
           <div ref={textBtnRef} className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto opacity-0">

@@ -266,7 +266,7 @@ export default function PricingPage() {
              <ZapIcon size={12} /> Precios Transparentes
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-            Invierte en el <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">futuro de tu empresa</span>
+            Invierte en el <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">futuro de tu fundación</span>
           </h1>
           
           <div className="flex items-center justify-center mt-12">
@@ -350,7 +350,7 @@ export default function PricingPage() {
                   </p>
                   <ul className="space-y-1.5">
                     <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Todo lo incluido en las licencias de uso.</li>
-                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Desarrollo de módulos o flujos personalizados para tu empresa.</li>
+                    <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Desarrollo de módulos o flujos personalizados para tu fundación.</li>
                     <li className="flex items-start gap-2 text-xs text-gray-600"><span className="text-purple-500 mt-0.5">✓</span> Acompañamiento técnico dedicado durante el desarrollo.</li>
                   </ul>
                 </div>

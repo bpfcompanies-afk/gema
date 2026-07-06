@@ -83,7 +83,7 @@ export const ConfirmationTemplate: React.FC<Readonly<ConfirmationTemplateProps>>
           {/* Footer */}
           <div style={{ textAlign: 'center' }}>
             <p style={{ color: '#9ca3af', fontSize: '12px', margin: '0' }}>
-              © {new Date().getFullYear()} Gema | Gestión Empresarial.
+              © {new Date().getFullYear()} Gema | Gestión de Fundaciónes.
             </p>
             <p style={{ color: '#9ca3af', fontSize: '12px', margin: '4px 0 0' }}>
               Bogotá, Colombia

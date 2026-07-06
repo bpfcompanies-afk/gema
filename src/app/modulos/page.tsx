@@ -77,7 +77,7 @@ const modules = [
     icon: Invoice03,
     color: 'text-purple-500',
     tagline: 'Del pedido a la orden, sin burocracia.',
-    description: 'Centraliza todas las necesidades de compra de la empresa en un solo flujo de aprobación transparente.',
+    description: 'Centraliza todas las necesidades de compra de fundación en un solo flujo de aprobación transparente.',
     features: [
       'Flujos de aprobación multinivel.',
       'Comparativo de cotizaciones de proveedores.',
@@ -105,7 +105,7 @@ const modules = [
     icon: WalletIcon,
     color: 'text-purple-600',
     tagline: 'Controla cada peso de tus billeteras.',
-    description: 'Gestiona billeteras digitales por sede, registra transacciones, valida comprobantes y mantén siempre visible el saldo disponible de tu empresa.',
+    description: 'Gestiona billeteras digitales por sede, registra transacciones, valida comprobantes y mantén siempre visible el saldo disponible de tu fundación.',
     features: [
       'Billeteras por sede con saldo en tiempo real.',
       'Flujo de validación de transacciones y archivos.',
@@ -173,7 +173,7 @@ export default function ModulesPage() {
             Explora nuestros <span className="text-gradient">Módulos</span>
           </h1>
           <p className="text-gray-500 text-lg md:text-xl max-w-2xl">
-            Cada herramienta que necesitas para operar tu empresa, unificada en una sola plataforma.
+            Cada herramienta que necesitas para operar tu fundación, unificada en una sola plataforma.
           </p>
         </div>
       </section>

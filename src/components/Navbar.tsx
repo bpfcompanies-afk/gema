@@ -91,7 +91,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Inicio', path: '/' },
     { name: 'Módulos', path: '/modulos' },
-    { name: 'Precios', path: '/precios' },
+    { name: 'Precios', path: '/pricecalculator' },
     { name: 'Contáctanos', path: '/contacto' },
   ];
 

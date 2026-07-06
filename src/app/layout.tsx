@@ -9,8 +9,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
-  title: "Gema | Gestión Empresarial Modular Avanzada",
-  description: "La herramienta definitiva que une la facilidad de uso con la potencia de SAP.",
+  title: "Gema | Software de Gestión para Fundaciones y ONG",
+  description: "Software de gestión para fundaciones y ONG. Optimiza tus procesos, presupuestos y proyectos en tiempo real con Gema. ¡Lleva el control absoluto hoy!",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

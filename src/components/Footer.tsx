@@ -115,7 +115,7 @@ export default function Footer() {
               <span className='text-4xl'>Gema</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
-              La plataforma modular que democratiza la gestión empresarial. Potencia de SAP, simplicidad de Canva.
+              La plataforma modular que democratiza la gestión de fundaciones. Potencia y simplicidad.
             </p>
             
             {/* Newsletter Input */}

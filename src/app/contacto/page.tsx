@@ -180,7 +180,7 @@ export default function ContactPage() {
                 className="group bg-white hover:shadow-xl hover:shadow-green-100/50 hover:-translate-y-1"
                 spotlightColor="rgba(34, 197, 94, 0.2)"
               >
-                 <a href="https://wa.me/573107935504" target="_blank" rel="noreferrer" className="block p-8 h-full">
+                 <a href="https://wa.me/573227405663" target="_blank" rel="noreferrer" className="block p-8 h-full">
                     <div className="flex justify-between items-start mb-8">
                        <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 group-hover:scale-110 transition-transform duration-300">
                           <Whatsapp size={28}  />
@@ -282,7 +282,7 @@ export default function ContactPage() {
                            required
                         />
                         <AnimatedInput 
-                           label="Empresa" 
+                           label="Fundacion / Empresa" 
                            placeholder="Ej. Gema Inc."
                            value={formState.company}
                            onChange={(e: any) => setFormState({...formState, company: e.target.value})}

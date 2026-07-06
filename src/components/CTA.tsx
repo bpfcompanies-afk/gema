@@ -41,7 +41,7 @@ export default function CTA() {
         </h2>
         
         <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
-          Únete a las empresas que han reducido sus tiempos de gestión administrativa en un 40% con nuestra plataforma modular.
+          Únete a las fundaciones que han reducido sus tiempos de gestión administrativa en un 40% con nuestra plataforma modular.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
