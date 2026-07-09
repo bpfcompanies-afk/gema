@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
+import { BookOpen01Icon } from 'hugeicons-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,13 +52,21 @@ export default function CTA() {
           >
             Hablar con Ventas
           </Link>
-          <Link 
-            href="/precios" 
+          <Link
+            href="/precios"
             className="px-10 py-4 rounded-full border-2 border-gema-dark/10 text-gema-dark font-bold text-lg hover:border-gema-dark transition-colors duration-300 bg-white"
           >
             Ver Planes
           </Link>
         </div>
+
+        <Link
+          href="/brochure"
+          className="inline-flex items-center gap-2 mt-8 text-gema-dark/70 font-semibold hover:text-gema-blue transition-colors duration-300"
+        >
+          <BookOpen01Icon size={18} />
+          Descargar Brochure
+        </Link>
       </div>
     </section>
   );

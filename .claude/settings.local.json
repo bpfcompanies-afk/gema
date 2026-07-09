@@ -3,7 +3,10 @@
     "allow": [
       "Bash(node -e \"const pkg = require\\('./node_modules/hugeicons-react/package.json'\\); console.log\\('main:', pkg.main\\); console.log\\('module:', pkg.module\\); console.log\\('exports:', JSON.stringify\\(pkg.exports, null, 2\\).slice\\(0, 300\\)\\);\")",
       "Bash(node -e \"const h = require\\('./node_modules/hugeicons-react/dist/cjs/hugeicons-react.js'\\); const keys = Object.keys\\(h\\); const wallet = keys.filter\\(k => /wallet/i.test\\(k\\)\\); const plus = keys.filter\\(k => /plus/i.test\\(k\\)\\).slice\\(0,5\\); const refresh = keys.filter\\(k => /refresh/i.test\\(k\\)\\).slice\\(0,5\\); console.log\\('WALLET:', wallet.join\\(', '\\)\\); console.log\\('PLUS:', plus.join\\(', '\\)\\); console.log\\('REFRESH:', refresh.join\\(', '\\)\\);\")",
-      "Bash(Select-Object -First 20)"
+      "Bash(Select-Object -First 20)",
+      "Bash(curl *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)"
     ]
   }
 }
