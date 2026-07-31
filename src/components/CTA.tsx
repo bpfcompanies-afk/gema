@@ -53,10 +53,10 @@ export default function CTA() {
             Hablar con Ventas
           </Link>
           <Link
-            href="/precios"
+            href="/pricecalculator"
             className="px-10 py-4 rounded-full border-2 border-gema-dark/10 text-gema-dark font-bold text-lg hover:border-gema-dark transition-colors duration-300 bg-white"
           >
-            Ver Planes
+            Armar Plan
           </Link>
         </div>
 
