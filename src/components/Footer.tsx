@@ -156,7 +156,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm text-gray-400">
               <li><Link href="/nosotros" className="hover:text-white hover:translate-x-1 transition-all inline-block">Sobre Nosotros</Link></li>
               <li><Link href="/brochure" className="hover:text-white hover:translate-x-1 transition-all inline-block">Brochure</Link></li>
-              <li><Link href="/precios" className="hover:text-white hover:translate-x-1 transition-all inline-block">Precios</Link></li>
+              <li><Link href="/pricecalculator" className="hover:text-white hover:translate-x-1 transition-all inline-block">Precios</Link></li>
               <li><Link href="/contacto" className="hover:text-white hover:translate-x-1 transition-all inline-block">Soporte</Link></li>
               <li><Link href="/contacto" className="hover:text-white hover:translate-x-1 transition-all inline-block">Partners</Link></li>
             </ul>
