@@ -26,7 +26,7 @@ Next.js 16 App Router project (TypeScript + Tailwind CSS v4) for the Gema ERP pr
 | Route | File | Description |
 |---|---|---|
 | `/` | `page.tsx` | Home — Hero → ValueProp → BentoGrid → CTA |
-| `/precios` | `precios/page.tsx` | Pricing page (4 tiers, monthly/annual toggle) |
+| `/pricecalculator` | `pricecalculator/page.tsx` | Plan configurator — shows NO prices; sends the selection to `/api/send`, which prices it server-side (`src/lib/pricing.ts`, server-only) for the internal email. `/precios` redirects here (`next.config.ts`). |
 | `/modulos` | `modulos/page.tsx` | Product modules showcase |
 | `/contacto` | `contacto/page.tsx` | Contact form → `/api/send` |
 | `/legales` | `legales/page.tsx` | Terms & conditions |

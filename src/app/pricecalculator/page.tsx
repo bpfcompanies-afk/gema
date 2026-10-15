@@ -16,40 +16,20 @@ import {
   Layers01Icon as CartIcon,
   ZapIcon,
 } from 'hugeicons-react';
+import {
+  TERMS, MODALITIES, CORE_MODULES as CORE_CATALOG, COMPLEMENTS, ARMA_MEDIDA_CAP,
+  type Term, type ModalityId, type Complement, type PlanSelection,
+} from '../../lib/plan-catalog';
 
-// ─── PLAZOS ──────────────────────────────────────────────────────────────────
-type Term = 'mensual' | '3m' | '6m' | '12m';
-
-const TERMS: { id: Term; label: string; shortLabel: string }[] = [
-  { id: 'mensual', label: 'Mes a mes',          shortLabel: 'Mensual'  },
-  { id: '3m',      label: 'Contrato 3 Meses',   shortLabel: '3 meses'  },
-  { id: '6m',      label: 'Contrato 6 Meses',   shortLabel: '6 meses'  },
-  { id: '12m',     label: 'Contrato 12 Meses',  shortLabel: '12 meses' },
-];
-
-// ─── PRECIOS ────────────────────────────────────────────────────────────────
-const CORE_PRICE: Record<Term, number> = { mensual: 89_000, '3m': 84_000, '6m': 78_000, '12m': 70_000 };
-const COMP_PRICE: Record<Term, number> = { mensual: 35_000, '3m': 33_000, '6m': 30_000, '12m': 28_000 };
-
-const ARMA_MEDIDA_PRICE: Record<Term, number>     = { mensual: 139_000, '3m': 132_000, '6m': 122_000, '12m': 110_000 };
-const OPERACION_TOTAL_PRICE: Record<Term, number> = { mensual: 189_000, '3m': 179_000, '6m': 165_000, '12m': 150_000 };
-
-const COMPANY_PRICE: Record<Term, number>   = { mensual: 39_000, '3m': 37_000, '6m': 34_000, '12m': 30_000 };
-const USER_UNIT_PRICE: Record<Term, number> = { mensual: 11_000, '3m': 9_000,  '6m': 8_000,  '12m': 7_000  };
-const USER_PACK_PRICE: Record<Term, number> = { mensual: 35_000, '3m': 29_000, '6m': 25_000, '12m': 19_000 };
-
-const formatCOP = (n: number) =>
-  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n);
+// Los precios NO viven en este archivo (llegaría al navegador): el servidor
+// calcula la cotización en /api/send a partir de la selección.
 
 // ─── MODALIDAD ───────────────────────────────────────────────────────────────
-type ModalityId = 'carta' | 'arma_medida' | 'operacion_total';
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const MODALITY_OPTIONS: { id: ModalityId; name: string; tagline: string; icon: React.ComponentType<any> }[] = [
-  { id: 'carta',           name: 'A la Carta',              tagline: 'Elige tus módulos uno por uno.',                            icon: CartIcon },
-  { id: 'arma_medida',     name: 'Arma tu Medida',          tagline: 'Elige exactamente 3 módulos por un precio fijo.',           icon: PackageIcon },
-  { id: 'operacion_total', name: 'Operación Total',         tagline: 'Todos los módulos incluidos, sin elegir nada.',             icon: DiamondIcon },
-];
+const MODALITY_ICONS: Record<ModalityId, React.ComponentType<any>> = {
+  carta: CartIcon, arma_medida: PackageIcon, operacion_total: DiamondIcon,
+};
+const MODALITY_OPTIONS = MODALITIES.map(m => ({ ...m, icon: MODALITY_ICONS[m.id] }));
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 type CoreModule = {
@@ -58,29 +38,23 @@ type CoreModule = {
   icon: React.ComponentType<any>;
   color: string; bg: string; desc: string;
 };
-type Complement = { id: string; name: string; requiresCore: string; desc: string; };
-interface CartItem { id: string; label: string; price: number; qty: number; note?: string; included?: boolean; }
+interface CartItem { id: string; label: string; qty: number; note?: string; included?: boolean; countable?: boolean; }
 
-const CORE_MODULES: CoreModule[] = [
-  { id: 'activos',     name: 'Activos Fijos',              icon: PackageIcon,  color: 'text-blue-600',   bg: 'bg-blue-50',   desc: 'Control y trazabilidad de tu patrimonio.' },
-  { id: 'iot',         name: 'IoT & Sensores',             icon: WifiIcon,     color: 'text-indigo-600', bg: 'bg-indigo-50', desc: 'Monitoreo en tiempo real de equipos y sensores.' },
-  { id: 'medico',      name: 'Gestión Médica',             icon: ActivityIcon, color: 'text-cyan-600',   bg: 'bg-cyan-50',   desc: 'Salud ocupacional integrada para tus colaboradores.' },
-  { id: 'cajamenor',   name: 'Caja Menor',                 icon: WalletIcon,   color: 'text-green-600',  bg: 'bg-green-50',  desc: 'Control automatizado de gastos menores y reembolsos.' },
-  { id: 'formularios', name: 'Formularios',                icon: FormIcon,     color: 'text-amber-600',  bg: 'bg-amber-50',  desc: 'Digitaliza procesos y flujos de trabajo sin código.' },
-  { id: 'dashboards',  name: 'Dashboards',                 icon: DiamondIcon,  color: 'text-purple-600', bg: 'bg-purple-50', desc: 'Indicadores clave y reportes en tiempo real.' },
-  { id: 'consumibles', name: 'Inventario de Consumibles',  icon: LayersIcon,   color: 'text-orange-600', bg: 'bg-orange-50', desc: 'Gestión de stock, EPPs e insumos de alta rotación.' },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MODULE_VISUALS: Record<string, { icon: React.ComponentType<any>; color: string; bg: string }> = {
+  activos:     { icon: PackageIcon,  color: 'text-blue-600',   bg: 'bg-blue-50'   },
+  iot:         { icon: WifiIcon,     color: 'text-indigo-600', bg: 'bg-indigo-50' },
+  medico:      { icon: ActivityIcon, color: 'text-cyan-600',   bg: 'bg-cyan-50'   },
+  cajamenor:   { icon: WalletIcon,   color: 'text-green-600',  bg: 'bg-green-50'  },
+  formularios: { icon: FormIcon,     color: 'text-amber-600',  bg: 'bg-amber-50'  },
+  dashboards:  { icon: DiamondIcon,  color: 'text-purple-600', bg: 'bg-purple-50' },
+  consumibles: { icon: LayersIcon,   color: 'text-orange-600', bg: 'bg-orange-50' },
+};
 
-const COMPLEMENTS: Complement[] = [
-  { id: 'movimientos',    name: 'Movimientos',         requiresCore: 'activos',     desc: 'Traslados y bajas de activos.' },
-  { id: 'procesos-compra',name: 'Procesos de Compra',  requiresCore: 'consumibles', desc: 'Requisición y órdenes de compra.' },
-];
+const CORE_MODULES: CoreModule[] = CORE_CATALOG.map(m => ({ ...m, ...MODULE_VISUALS[m.id] }));
 
 const ALL_CORE_IDS = new Set(CORE_MODULES.map(m => m.id));
 const ALL_COMP_IDS = new Set(COMPLEMENTS.map(c => c.id));
-
-// ─── CONSTRUCTOR DE IDEAS (servicio aparte, no es un módulo) ─────────────────
-const CONSTRUCTOR_PRICE = 79_000; // precio fijo, no varía según el plazo de contrato
 
 // ─── STEPPER ─────────────────────────────────────────────────────────────────
 const STEPS = [
@@ -144,8 +118,8 @@ function TermSelector({ term, onChange }: { term: Term; onChange: (t: Term) => v
 }
 
 // ─── TARJETA DE MODALIDAD ────────────────────────────────────────────────────
-function ModalityCard({ opt, active, price, onSelect }: {
-  opt: typeof MODALITY_OPTIONS[number]; active: boolean; price: string; onSelect: () => void;
+function ModalityCard({ opt, active, onSelect }: {
+  opt: typeof MODALITY_OPTIONS[number]; active: boolean; onSelect: () => void;
 }) {
   return (
     <button
@@ -161,8 +135,7 @@ function ModalityCard({ opt, active, price, onSelect }: {
         {active && <div className="text-gema-blue"><CheckmarkIcon size={20} /></div>}
       </div>
       <h3 className="font-bold text-sm text-gray-900 mb-1 leading-tight">{opt.name}</h3>
-      <p className="text-xs text-gray-500 leading-relaxed mb-3">{opt.tagline}</p>
-      <span className={`text-xs font-bold ${active ? 'text-gema-blue' : 'text-gray-400'}`}>{price}</span>
+      <p className="text-xs text-gray-500 leading-relaxed">{opt.tagline}</p>
     </button>
   );
 }
@@ -173,13 +146,13 @@ type ModuleCardMode = 'unlimited' | 'capped' | 'readonly';
 function CoreModuleCard({
   mod, isSelected, complement, complementSelected,
   onToggleCore, onToggleComplement, onAutoActivate, isFlashing,
-  mode, corePrice, compPrice, coreBlocked, compBlocked,
+  mode, coreBlocked, compBlocked,
 }: {
   mod: CoreModule; isSelected: boolean;
   complement?: Complement; complementSelected: boolean;
   onToggleCore: () => void; onToggleComplement: () => void;
   onAutoActivate: () => void; isFlashing: boolean;
-  mode: ModuleCardMode; corePrice: number; compPrice: number;
+  mode: ModuleCardMode;
   coreBlocked: boolean; compBlocked: boolean;
 }) {
   const flashRef = useRef<HTMLDivElement>(null);
@@ -218,7 +191,7 @@ function CoreModuleCard({
           {isSelected && <CheckmarkIcon size={18} className="text-gema-blue" />}
           {mode === 'unlimited' && (
             <span className={`text-xs font-bold whitespace-nowrap ${isSelected ? 'text-gema-blue' : 'text-gray-400'}`}>
-              {formatCOP(corePrice)}/mes
+              {isSelected ? 'Agregado' : 'Agregar'}
             </span>
           )}
           {mode === 'capped' && (
@@ -274,7 +247,7 @@ function CoreModuleCard({
 
           <span className={`font-bold shrink-0 tabular-nums ${readOnly ? 'text-emerald-600' : isSelected && complementSelected ? 'text-gema-blue' : 'text-gray-400'}`}>
             {mode === 'unlimited'
-              ? `${formatCOP(compPrice)}/mes`
+              ? (isSelected && complementSelected ? 'Agregado' : 'Agregar')
               : readOnly || (isSelected && complementSelected)
                 ? 'Incluido'
                 : compBlocked ? 'Sin cupo' : '1 cupo'}
@@ -286,20 +259,15 @@ function CoreModuleCard({
 }
 
 // ─── CONTADOR ────────────────────────────────────────────────────────────────
-function Counter({ label, sublabel, value, price, unitLabel = 'unidad', onChange }: {
-  label: string; sublabel?: string; value: number; price: number; unitLabel?: string; onChange: (v: number) => void;
+function Counter({ label, sublabel, value, onChange }: {
+  label: string; sublabel?: string; value: number; onChange: (v: number) => void;
 }) {
   const active = value > 0;
   return (
     <div className={`rounded-2xl border-2 p-5 transition-all duration-200 ${active ? 'border-gema-blue bg-blue-50/30 shadow-lg shadow-blue-100/50' : 'border-gray-200 bg-white'}`}>
-      <div className="flex items-start justify-between mb-5">
-        <div>
-          <p className="font-bold text-sm text-gray-900">{label}</p>
-          {sublabel && <p className="text-xs text-gray-500 mt-0.5 leading-snug">{sublabel}</p>}
-        </div>
-        <span className={`text-xs font-bold shrink-0 ml-2 ${active ? 'text-gema-blue' : 'text-gray-400'}`}>
-          {formatCOP(price)}/{unitLabel}
-        </span>
+      <div className="mb-5">
+        <p className="font-bold text-sm text-gray-900">{label}</p>
+        {sublabel && <p className="text-xs text-gray-500 mt-0.5 leading-snug">{sublabel}</p>}
       </div>
       <div className="flex items-center gap-3">
         <button type="button" onClick={() => onChange(Math.max(0, value - 1))} disabled={value === 0}
@@ -311,46 +279,14 @@ function Counter({ label, sublabel, value, price, unitLabel = 'unidad', onChange
           className="w-9 h-9 rounded-full bg-gema-blue text-white flex items-center justify-center text-lg font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
           +
         </button>
-        {active && <span className="ml-auto text-sm font-bold text-gray-700 tabular-nums">{formatCOP(value * price)}</span>}
       </div>
     </div>
   );
 }
 
-// ─── CONTADOR ANIMADO (GSAP) ─────────────────────────────────────────────────
-function AnimatedTotal({ total }: { total: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const displayed = useRef(0);
-
-  useLayoutEffect(() => {
-    if (ref.current) ref.current.textContent = formatCOP(0);
-  }, []);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const obj = { val: displayed.current };
-    const tween = gsap.to(obj, {
-      val: total,
-      duration: 0.55,
-      ease: 'power2.out',
-      onUpdate() {
-        const v = Math.round(obj.val);
-        displayed.current = v;
-        if (ref.current) ref.current.textContent = formatCOP(v);
-      },
-    });
-    return () => {
-      tween.kill();
-      displayed.current = Math.round(obj.val);
-    };
-  }, [total]);
-
-  return <span ref={ref} className="text-2xl font-extrabold text-gray-900 tabular-nums" />;
-}
-
 // ─── CARRITO ─────────────────────────────────────────────────────────────────
-function CartSummary({ items, total, planLabel, termLabel, onCheckout }: {
-  items: CartItem[]; total: number; planLabel: string; termLabel: string; onCheckout: () => void;
+function CartSummary({ items, planLabel, termLabel, onCheckout }: {
+  items: CartItem[]; planLabel: string; termLabel: string; onCheckout: () => void;
 }) {
   const isEmpty = items.length === 0;
   return (
@@ -390,16 +326,12 @@ function CartSummary({ items, total, planLabel, termLabel, onCheckout }: {
             <li key={item.id} className="flex items-start justify-between gap-3 text-sm">
               <div className="flex-1 min-w-0">
                 <span className="font-medium text-gray-900 block leading-snug">{item.label}</span>
-                {item.qty > 1 && <span className="text-xs text-gray-400">{item.qty} × {formatCOP(item.price)}</span>}
                 {item.note && <span className="text-xs text-gray-400 block mt-0.5 leading-snug">{item.note}</span>}
               </div>
               {item.included ? (
-                <div className="text-right shrink-0">
-                  <span className="text-xs text-gray-300 line-through tabular-nums block">{formatCOP(item.qty * item.price)}</span>
-                  <span className="font-bold text-emerald-600">Gratis</span>
-                </div>
-              ) : (
-                <span className="font-bold text-gray-900 shrink-0 tabular-nums">{formatCOP(item.qty * item.price)}</span>
+                <span className="font-bold text-emerald-600 shrink-0">Gratis</span>
+              ) : (item.countable || item.qty > 1) && (
+                <span className="font-bold text-gray-900 shrink-0 tabular-nums">× {item.qty}</span>
               )}
             </li>
           ))}
@@ -407,12 +339,11 @@ function CartSummary({ items, total, planLabel, termLabel, onCheckout }: {
       )}
 
       <div className={`pt-5 border-t border-gray-100 ${isEmpty ? 'opacity-40' : ''}`}>
-        <div className="flex justify-between items-baseline mb-6">
-          <span className="text-sm text-gray-500 font-medium">Total mensual</span>
-          <div className="text-right">
-            <AnimatedTotal total={total} />
-            <span className="text-xs text-gray-400 block">/mes</span>
-          </div>
+        <div className="mb-6">
+          <p className="text-sm font-bold text-gray-900">Cotización personalizada</p>
+          <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+            Envíanos tu selección y un especialista te compartirá el valor de tu plan.
+          </p>
         </div>
 
         <button type="button" onClick={onCheckout} disabled={isEmpty}
@@ -452,35 +383,21 @@ function ModalField({ label, type = 'text', value, onChange, placeholder, requir
   );
 }
 
-function CheckoutModal({ items, total, planLabel, termLabel, onClose, onFinish }: {
-  items: CartItem[]; total: number; planLabel: string; termLabel: string; onClose: () => void; onFinish: () => void;
+function CheckoutModal({ items, selection, planLabel, termLabel, onClose, onFinish }: {
+  items: CartItem[]; selection: PlanSelection; planLabel: string; termLabel: string; onClose: () => void; onFinish: () => void;
 }) {
   const [modalStep, setModalStep] = useState<CheckoutStep>('summary');
   const [formState, setFormState] = useState({ name: '', email: '', company: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const buildQuoteSummary = () => {
-    const lines = items.map(item => {
-      const qtyPrefix = item.qty > 1 ? `${item.qty}x ` : '';
-      const lineTotal = item.included ? 'Gratis' : formatCOP(item.qty * item.price);
-      return `- ${qtyPrefix}${item.label}: ${lineTotal}`;
-    });
-    return [
-      'Cotización armada en la calculadora de precio:',
-      `Modalidad: ${planLabel}`,
-      `Plazo: ${termLabel}`,
-      ...lines,
-      `Total mensual: ${formatCOP(total)}`,
-    ].join('\n');
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
-    const fullMessage = [formState.message.trim(), buildQuoteSummary()].filter(Boolean).join('\n\n');
     try {
+      // Solo se envía la selección: el servidor calcula los valores y arma la
+      // cotización para el correo interno.
       const response = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -488,7 +405,8 @@ function CheckoutModal({ items, total, planLabel, termLabel, onClose, onFinish }
           name: formState.name,
           email: formState.email,
           company: formState.company,
-          message: fullMessage,
+          message: formState.message,
+          plan: selection,
         }),
       });
       if (response.ok) {
@@ -511,7 +429,9 @@ function CheckoutModal({ items, total, planLabel, termLabel, onClose, onFinish }
   return (
     // z-[250]: el navbar fijo usa z-200, así que el overlay debe ir por encima para
     // no quedar montado debajo de él cuando el modal crece con muchas selecciones.
-    <div className="fixed inset-0 z-250 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto" onClick={handleDismiss}>
+    // data-lenis-prevent: Lenis (smooth scroll global) intercepta la rueda del mouse;
+    // sin esto, la lista con scroll interno del modal no responde a la rueda.
+    <div data-lenis-prevent className="fixed inset-0 z-250 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto" onClick={handleDismiss}>
       <div
         className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[85vh] my-auto flex flex-col relative"
         onClick={e => e.stopPropagation()}
@@ -521,12 +441,12 @@ function CheckoutModal({ items, total, planLabel, termLabel, onClose, onFinish }
           ✕
         </button>
 
-        {/* Contenido con scroll interno: el modal nunca crece más allá de max-h-[85vh],
-            sin importar cuántos ítems haya en la selección. */}
-        <div className="overflow-y-auto p-8">
+        {/* El modal nunca crece más allá de max-h-[85vh]. En el resumen, el scroll vive
+            solo en la lista de ítems, así el botón "Continuar" siempre queda visible. */}
+        <div className={`p-8 min-h-0 ${modalStep === 'summary' ? 'flex flex-col' : 'overflow-y-auto'}`}>
           {modalStep === 'summary' && (
             <>
-              <div className="text-center mb-7">
+              <div className="text-center mb-7 shrink-0">
                 <div className="w-16 h-16 rounded-2xl bg-gema-blue/10 flex items-center justify-center mx-auto mb-4">
                   <ZapIcon size={28} className="text-gema-blue" />
                 </div>
@@ -535,43 +455,35 @@ function CheckoutModal({ items, total, planLabel, termLabel, onClose, onFinish }
                   Revisa tu selección y continúa para dejarnos tus datos.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-5 mb-6">
-                <div className="flex flex-wrap gap-2 mb-4">
+              <div className="bg-gray-50 rounded-2xl p-5 mb-6 flex flex-col min-h-0">
+                <div className="flex flex-wrap gap-2 mb-4 shrink-0">
                   <span className="text-[10px] font-bold uppercase tracking-widest bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full">{planLabel}</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest bg-gray-200 text-gray-600 px-2.5 py-1 rounded-full">{termLabel}</span>
                 </div>
-                <ul className="space-y-2.5">
+                <ul className="space-y-2.5 min-h-16 overflow-y-auto overscroll-contain pr-1 -mr-1">
                   {items.map(item => (
                     <li key={item.id} className="flex justify-between text-sm gap-3">
                       <div className="min-w-0">
-                        <span className="text-gray-600">{item.qty > 1 ? `${item.qty}× ` : ''}{item.label}</span>
+                        <span className="text-gray-600">{item.countable || item.qty > 1 ? `${item.qty}× ` : ''}{item.label}</span>
                         {item.note && <span className="text-xs text-gray-400 block leading-snug">{item.note}</span>}
                       </div>
-                      {item.included ? (
-                        <div className="text-right shrink-0">
-                          <span className="text-xs text-gray-300 line-through tabular-nums block">{formatCOP(item.qty * item.price)}</span>
-                          <span className="font-bold text-emerald-600 text-sm">Gratis</span>
-                        </div>
-                      ) : (
-                        <span className="font-bold text-gray-900 tabular-nums shrink-0">{formatCOP(item.qty * item.price)}</span>
-                      )}
+                      {item.included && <span className="font-bold text-emerald-600 text-sm shrink-0">Gratis</span>}
                     </li>
                   ))}
                 </ul>
-                <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between items-baseline">
-                  <span className="font-bold text-gray-900 text-sm">Total mensual</span>
-                  <span className="font-extrabold text-gema-blue text-lg tabular-nums">{formatCOP(total)}</span>
-                </div>
+                <p className="border-t border-gray-200 mt-4 pt-4 text-xs text-gray-500 leading-relaxed shrink-0">
+                  Un especialista te enviará la cotización con el valor de tu plan.
+                </p>
               </div>
               <button
                 type="button"
                 onClick={() => setModalStep('form')}
-                className="flex items-center justify-center gap-2 w-full py-3.5 bg-gema-gradient text-white rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
+                className="shrink-0 flex items-center justify-center gap-2 w-full py-3.5 bg-gema-gradient text-white rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
               >
                 <span>Continuar</span>
                 <ArrowRightIcon size={16} />
               </button>
-              <p className="text-center text-xs text-gray-400 mt-4">Sin compromiso · Te contactamos en 24 h</p>
+              <p className="shrink-0 text-center text-xs text-gray-400 mt-4">Sin compromiso · Te contactamos en 24 h</p>
             </>
           )}
 
@@ -704,7 +616,7 @@ export default function PriceCalculatorPage() {
 
   // ── Cupo según modalidad ─────────────────────────────────────────────────
   const cap: number | 'all' | null = useMemo(() => {
-    if (modality === 'arma_medida') return 3;
+    if (modality === 'arma_medida') return ARMA_MEDIDA_CAP;
     if (modality === 'operacion_total') return 'all';
     return null;
   }, [modality]);
@@ -781,37 +693,26 @@ export default function PriceCalculatorPage() {
   const effectiveComps  = cardMode === 'readonly' ? ALL_COMP_IDS : selectedComps;
   const moduleCount = effectiveCores.size + effectiveComps.size;
 
-  // ── Precio del plan base (módulos) ───────────────────────────────────────
-  const planPrice = useMemo(() => {
-    if (cardMode === 'unlimited') return selectedCores.size * CORE_PRICE[term] + selectedComps.size * COMP_PRICE[term];
-    if (modality === 'arma_medida') return ARMA_MEDIDA_PRICE[term];
-    return OPERACION_TOTAL_PRICE[term];
-  }, [cardMode, modality, term, selectedCores.size, selectedComps.size]);
-
-  const planLabel = useMemo(() => {
-    if (modality === 'carta') return 'A la Carta';
-    if (modality === 'arma_medida') return 'Paquete "Arma tu Medida"';
-    return 'Paquete "Operación Total"';
-  }, [modality]);
-
+  const planLabel = MODALITIES.find(m => m.id === modality)!.label;
   const termLabel = TERMS.find(t => t.id === term)!.label;
 
-  // ── Totales ──────────────────────────────────────────────────────────────
-  const total =
-    planPrice +
-    userUnits * USER_UNIT_PRICE[term] +
-    userPacks * USER_PACK_PRICE[term] +
-    companies * COMPANY_PRICE[term] +
-    (constructorSelected ? CONSTRUCTOR_PRICE : 0);
+  // Lo que se envía al servidor para cotizar (sin precios).
+  const selection: PlanSelection = {
+    term, modality,
+    cores: Array.from(effectiveCores),
+    comps: Array.from(effectiveComps),
+    userUnits, userPacks, companies,
+    constructorIdeas: constructorSelected,
+  };
 
   const cartItems: CartItem[] = useMemo(() => {
     const items: CartItem[] = [];
 
     if (cardMode === 'unlimited') {
       Array.from(selectedCores).forEach(id =>
-        items.push({ id, label: CORE_MODULES.find(m => m.id === id)!.name, price: CORE_PRICE[term], qty: 1 }));
+        items.push({ id, label: CORE_MODULES.find(m => m.id === id)!.name, qty: 1 }));
       Array.from(selectedComps).forEach(id =>
-        items.push({ id, label: `${COMPLEMENTS.find(c => c.id === id)!.name} (Complemento)`, price: COMP_PRICE[term], qty: 1 }));
+        items.push({ id, label: `${COMPLEMENTS.find(c => c.id === id)!.name} (Complemento)`, qty: 1 }));
     } else {
       const chosenNames = [
         ...Array.from(effectiveCores).map(id => CORE_MODULES.find(m => m.id === id)!.name),
@@ -820,7 +721,6 @@ export default function PriceCalculatorPage() {
       items.push({
         id: 'plan',
         label: planLabel,
-        price: planPrice,
         qty: 1,
         note: chosenNames.length ? chosenNames.join(', ') : 'Aún no has elegido módulos',
       });
@@ -828,27 +728,27 @@ export default function PriceCalculatorPage() {
 
     if (moduleCount > 0) {
       items.push({
-        id: 'bonus-users', label: '5 usuarios incluidos', price: USER_PACK_PRICE[term], qty: 1,
+        id: 'bonus-users', label: '5 usuarios incluidos', qty: 1,
         note: 'Incluidos sin costo por tu selección de módulos', included: true,
       });
       items.push({
-        id: 'bonus-company', label: '1 compañía incluida', price: COMPANY_PRICE[term], qty: 1,
+        id: 'bonus-company', label: '1 compañía incluida', qty: 1,
         note: 'Incluida sin costo por tu selección de módulos', included: true,
       });
     }
 
-    if (userUnits > 0) items.push({ id: 'uu', label: 'Usuarios individuales', price: USER_UNIT_PRICE[term], qty: userUnits });
-    if (userPacks > 0) items.push({ id: 'up', label: 'Paquetes × 5 usuarios', price: USER_PACK_PRICE[term], qty: userPacks });
-    if (companies > 0) items.push({ id: 'co', label: 'Compañías adicionales', price: COMPANY_PRICE[term], qty: companies });
+    if (userUnits > 0) items.push({ id: 'uu', label: 'Usuarios individuales', qty: userUnits, countable: true });
+    if (userPacks > 0) items.push({ id: 'up', label: 'Paquetes × 5 usuarios', qty: userPacks, countable: true });
+    if (companies > 0) items.push({ id: 'co', label: 'Compañías adicionales', qty: companies, countable: true });
     if (constructorSelected) {
       items.push({
-        id: 'constructor', label: 'Constructor de Ideas', price: CONSTRUCTOR_PRICE, qty: 1,
+        id: 'constructor', label: 'Constructor de Ideas', qty: 1,
         note: 'Servicio aparte (no es un módulo) · precio fijo sin importar el plazo',
       });
     }
 
     return items;
-  }, [cardMode, selectedCores, selectedComps, effectiveCores, effectiveComps, moduleCount, planLabel, planPrice, term, userUnits, userPacks, companies, constructorSelected]);
+  }, [cardMode, selectedCores, selectedComps, effectiveCores, effectiveComps, moduleCount, planLabel, userUnits, userPacks, companies, constructorSelected]);
 
   // ── Animación de entrada ─────────────────────────────────────────────────
   useLayoutEffect(() => {
@@ -862,7 +762,7 @@ export default function PriceCalculatorPage() {
   const infraHeading = useMemo(() => {
     if (cardMode === 'unlimited') return {
       title: 'Tu Infraestructura',
-      desc: <>Elige los módulos base de tu operación a <span className="font-semibold text-gray-700">{formatCOP(CORE_PRICE[term])}/mes</span> cada uno. Los complementos aparecen acoplados a su módulo y puedes añadirlos con un clic.</>,
+      desc: <>Elige los módulos base de tu operación. Los complementos aparecen acoplados a su módulo y puedes añadirlos con un clic.</>,
     };
     if (cardMode === 'readonly') return {
       title: 'Tu Infraestructura',
@@ -872,7 +772,7 @@ export default function PriceCalculatorPage() {
       title: 'Tu Infraestructura',
       desc: <>Elige hasta <span className="font-semibold text-gray-700">{numericCap} módulo{numericCap === 1 ? '' : 's'}</span> (core o complementarios) incluidos en <span className="font-semibold text-gray-700">{planLabel}</span>.</>,
     };
-  }, [cardMode, term, planLabel, numericCap]);
+  }, [cardMode, planLabel, numericCap]);
 
   return (
     <main ref={containerRef} className="bg-white min-h-screen relative">
@@ -881,7 +781,7 @@ export default function PriceCalculatorPage() {
       {/* HEADER */}
       <section className="pt-40 pb-10 px-6 text-center relative z-10 page-fade">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[11px] font-bold uppercase tracking-widest mb-6 border border-blue-100">
-          <ZapIcon size={12} /> Calculadora de Precio
+          <ZapIcon size={12} /> Configurador de Plan
         </div>
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
           Arma tu <span className="text-gradient">plan ideal</span>
@@ -921,18 +821,12 @@ export default function PriceCalculatorPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {MODALITY_OPTIONS.map(opt => {
-                      const price =
-                        opt.id === 'carta' ? `Desde ${formatCOP(CORE_PRICE[term])}/mes por módulo`
-                        : opt.id === 'arma_medida' ? `${formatCOP(ARMA_MEDIDA_PRICE[term])}/mes`
-                        : `${formatCOP(OPERACION_TOTAL_PRICE[term])}/mes`;
-                      return (
-                        <ModalityCard
-                          key={opt.id} opt={opt} active={modality === opt.id} price={price}
-                          onSelect={() => setModality(opt.id)}
-                        />
-                      );
-                    })}
+                    {MODALITY_OPTIONS.map(opt => (
+                      <ModalityCard
+                        key={opt.id} opt={opt} active={modality === opt.id}
+                        onSelect={() => setModality(opt.id)}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
@@ -968,8 +862,6 @@ export default function PriceCalculatorPage() {
                           onAutoActivate={() => comp && autoActivate(mod.id, comp.id)}
                           isFlashing={flashingCore === mod.id}
                           mode={cardMode}
-                          corePrice={CORE_PRICE[term]}
-                          compPrice={COMP_PRICE[term]}
                           coreBlocked={coreBlocked}
                           compBlocked={compBlocked}
                         />
@@ -982,12 +874,12 @@ export default function PriceCalculatorPage() {
                       <>
                         {selectedCores.size > 0 && (
                           <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100">
-                            {selectedCores.size} módulo{selectedCores.size > 1 ? 's' : ''} core · {formatCOP(selectedCores.size * CORE_PRICE[term])}/mes
+                            {selectedCores.size} módulo{selectedCores.size > 1 ? 's' : ''} core
                           </span>
                         )}
                         {selectedComps.size > 0 && (
                           <span className="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-100">
-                            {selectedComps.size} complemento{selectedComps.size > 1 ? 's' : ''} · {formatCOP(selectedComps.size * COMP_PRICE[term])}/mes
+                            {selectedComps.size} complemento{selectedComps.size > 1 ? 's' : ''}
                           </span>
                         )}
                       </>
@@ -999,7 +891,7 @@ export default function PriceCalculatorPage() {
                     )}
                     {cardMode === 'readonly' && (
                       <span className="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-100">
-                        {moduleCount} módulos incluidos · {formatCOP(planPrice)}/mes
+                        {moduleCount} módulos incluidos
                       </span>
                     )}
                   </div>
@@ -1033,9 +925,8 @@ export default function PriceCalculatorPage() {
                         <div className="shrink-0 flex flex-col items-end gap-1">
                           {constructorSelected && <CheckmarkIcon size={18} className="text-gema-blue" />}
                           <span className={`text-xs font-bold whitespace-nowrap ${constructorSelected ? 'text-gema-blue' : 'text-gray-400'}`}>
-                            {formatCOP(CONSTRUCTOR_PRICE)}/mes
+                            {constructorSelected ? 'Agregado' : 'Agregar'}
                           </span>
-                          <span className="text-[10px] text-gray-300 whitespace-nowrap">Precio fijo</span>
                         </div>
                       </button>
                     </div>
@@ -1049,28 +940,27 @@ export default function PriceCalculatorPage() {
                   <div className="mb-6">
                     <h2 className="text-lg font-extrabold text-gray-900">Tu Equipo</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                      Agrega usuarios individualmente o en paquetes de 5. El paquete te ahorra{' '}
-                      <span className="font-semibold text-emerald-600">{formatCOP(5 * USER_UNIT_PRICE[term] - USER_PACK_PRICE[term])}</span>{' '}
-                      respecto al precio por unidad.
+                      Agrega usuarios individualmente o en paquetes de 5. El paquete tiene{' '}
+                      <span className="font-semibold text-emerald-600">mejor precio</span>{' '}
+                      que agregar 5 usuarios por separado.
                     </p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Counter
                       label="Usuario individual"
                       sublabel="Acceso completo a la plataforma"
-                      value={userUnits} price={USER_UNIT_PRICE[term]} unitLabel="usuario" onChange={setUserUnits}
+                      value={userUnits} onChange={setUserUnits}
                     />
                     <Counter
                       label="Paquete × 5 usuarios"
-                      sublabel={`Ahorra ${formatCOP(5 * USER_UNIT_PRICE[term] - USER_PACK_PRICE[term])} vs. unitario`}
-                      value={userPacks} price={USER_PACK_PRICE[term]} unitLabel="paquete" onChange={setUserPacks}
+                      sublabel="Ahorra frente a 5 usuarios individuales"
+                      value={userPacks} onChange={setUserPacks}
                     />
                   </div>
                   {(userUnits > 0 || userPacks > 0) && (
                     <div className="mt-4 p-4 rounded-2xl bg-blue-50 border border-blue-100">
                       <p className="text-sm text-gray-700">
-                        <span className="font-bold text-gray-900">{userUnits + userPacks * 5} usuarios</span> en total ·{' '}
-                        <span className="font-bold text-gema-blue tabular-nums">{formatCOP(userUnits * USER_UNIT_PRICE[term] + userPacks * USER_PACK_PRICE[term])}/mes</span>
+                        <span className="font-bold text-gray-900">{userUnits + userPacks * 5} usuarios</span> adicionales en total
                       </p>
                     </div>
                   )}
@@ -1083,22 +973,20 @@ export default function PriceCalculatorPage() {
                   <div className="mb-6">
                     <h2 className="text-lg font-extrabold text-gray-900">Tu Organización</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                      Cada compañía es una instancia independiente con datos, usuarios y configuración propios.{' '}
-                      <span className="font-semibold text-gray-700">{formatCOP(COMPANY_PRICE[term])}/compañía</span>.
+                      Cada compañía es una instancia independiente con datos, usuarios y configuración propios.
                     </p>
                   </div>
                   <div className="max-w-sm">
                     <Counter
                       label="Compañía adicional"
                       sublabel="Instancia de empresa independiente"
-                      value={companies} price={COMPANY_PRICE[term]} unitLabel="compañía" onChange={setCompanies}
+                      value={companies} onChange={setCompanies}
                     />
                   </div>
                   {companies > 0 && (
                     <div className="mt-4 max-w-sm p-4 rounded-2xl bg-blue-50 border border-blue-100">
                       <p className="text-sm text-gray-700">
-                        <span className="font-bold text-gray-900">{companies} compañía{companies > 1 ? 's' : ''}</span> ·{' '}
-                        <span className="font-bold text-gema-blue tabular-nums">{formatCOP(companies * COMPANY_PRICE[term])}/mes</span>
+                        <span className="font-bold text-gray-900">{companies} compañía{companies > 1 ? 's' : ''}</span> adicional{companies > 1 ? 'es' : ''}
                       </p>
                     </div>
                   )}
@@ -1138,7 +1026,7 @@ export default function PriceCalculatorPage() {
               propio elemento sticky, donde no afecta su comportamiento. */}
           <div>
             <div className="lg:sticky lg:top-28 page-fade">
-              <CartSummary items={cartItems} total={total} planLabel={planLabel} termLabel={termLabel} onCheckout={() => setShowModal(true)} />
+              <CartSummary items={cartItems} planLabel={planLabel} termLabel={termLabel} onCheckout={() => setShowModal(true)} />
             </div>
           </div>
         </div>
@@ -1150,7 +1038,7 @@ export default function PriceCalculatorPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs text-gray-500">{cartItems.length} elemento{cartItems.length > 1 ? 's' : ''}</p>
-              <p className="font-extrabold text-gray-900 text-lg tabular-nums">{formatCOP(total)}/mes</p>
+              <p className="font-extrabold text-gray-900 text-sm leading-tight">{planLabel}</p>
             </div>
             <button type="button" onClick={() => setShowModal(true)}
               className="flex items-center gap-2 px-5 py-3 bg-gema-gradient text-white rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
@@ -1162,7 +1050,7 @@ export default function PriceCalculatorPage() {
 
       {showModal && (
         <CheckoutModal
-          items={cartItems} total={total} planLabel={planLabel} termLabel={termLabel}
+          items={cartItems} selection={selection} planLabel={planLabel} termLabel={termLabel}
           onClose={() => setShowModal(false)}
           onFinish={resetCalculator}
         />
